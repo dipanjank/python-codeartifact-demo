@@ -24,7 +24,7 @@ jobs:
         run: "git --version"
       
       - name: Check rev-parse command"
-        run: "git rev parse main --"
+        run: "git rev-list main --"
  
       - name: Install Poetry
         run: "pip install -r requirements-cicd.txt"
