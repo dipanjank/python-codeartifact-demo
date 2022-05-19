@@ -26,9 +26,9 @@ showdeps: ## run poetry to show deps
 	poetry show --latest
 
 lint: ## Runs bandit and black in check mode
-	poetry run flake8
+	poetry run flake8 .
 	@echo '-------------------------------'
-	poetry run bandit -r src
+	poetry run bandit -r python_codeartifact_demo
 
 test: hidden ## run pytest with coverage
 	poetry run pytest -v --cov python_codeartifact_demo
