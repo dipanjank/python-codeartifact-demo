@@ -30,7 +30,7 @@ enable = true
 pytest = "^6.0.1"
 pytest-cov = "^2.10.1"
 pytest-xdist = "^2.1.0"
-flake8 == "^4.0.1"
+flake8 = "^4.0.1"
 bandit = "^1.6.2"
 pylint = "^2.6.0"
 bump2version = "^1.0.1"
