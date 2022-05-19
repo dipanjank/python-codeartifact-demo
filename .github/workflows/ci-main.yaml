@@ -33,5 +33,5 @@ jobs:
       - name: Build Package
         run: make build
      
-      - Create Auto Tag
-        run: auto-tag -b main -r . -u origin --skip-tag-if-one-already-present --append-v-to-tag 
+      - name: Create Auto Tag
+        run: "auto-tag -b main -r . -u origin --skip-tag-if-one-already-present --append-v-to-tag" 
