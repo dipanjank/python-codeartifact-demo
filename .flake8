@@ -1,0 +1,17 @@
+[flake8]
+ignore = D203,D241,E231,E501,F841,W503,F403,E266,W605,F541,F401,E712,E402
+extend-ignore = E203
+exclude = .git,
+    __pycache__,
+    build,
+    dist,
+    lib,
+    bin,
+    include,
+    share,
+    Lib,
+    Scripts,
+max-line-length = 120
+max-complexity = 18
+select = B,C,E,F,W,T4,B9
+
