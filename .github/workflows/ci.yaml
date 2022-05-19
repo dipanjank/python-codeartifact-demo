@@ -1,0 +1,35 @@
+name: CI
+
+on: [push]
+
+jobs:
+
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+
+      - name: Install Poetry
+        uses: pip install -r requirements-cicd.txt
+
+      - name: Set Poetry Virtualenv config
+        run: |
+          poetry config settings.virtualenvs.in-project false
+          poetry config settings.virtualenvs.path ~/.virtualenvs
+
+      - name: Install Dependencies
+        run: make install
+
+      - name: Run Code Quality checks
+        run: make lint
+
+      - name: Test with pytest
+        run: make test 
