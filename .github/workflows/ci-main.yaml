@@ -9,13 +9,11 @@ jobs:
   test-main:
     runs-on: ubuntu-latest
     steps:
-      - name: Set Default Branch Name"
+      - name: Set Default Branch Name
         run: "git config --global init.defaultBranch main"
 
       - name: Checkout
-        uses: actions/checkout@v1
-        with:
-          fetch-depth: 1
+        uses: actions/checkout@v3
 
       - name: Set up Python 3.8
         uses: actions/setup-python@v1
@@ -24,12 +22,6 @@ jobs:
       - name: Update Packages
         run: "sudo apt-get update -y && sudo apt-get upgrade -y"
       
-      - name: Print Git Version
-        run: "git --version"
-      
-      - name: Check rev-parse command"
-        run: "git rev-list main --"
- 
       - name: Install Poetry
         run: "pip install -r requirements-cicd.txt"
       
