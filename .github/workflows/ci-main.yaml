@@ -19,7 +19,13 @@ jobs:
           python-version: 3.8
       - name: Update Packages
         run: "sudo apt-get update -y && sudo apt-get upgrade -y"
-
+      
+      - name: Print Git Version
+        run: "git --version"
+      
+      - name: Check rev-parse command"
+        run: "git rev parse main --"
+ 
       - name: Install Poetry
         run: "pip install -r requirements-cicd.txt"
       
