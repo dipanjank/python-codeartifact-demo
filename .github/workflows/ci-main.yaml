@@ -9,7 +9,11 @@ jobs:
   test-main:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - name: Set Default Branch Name"
+        run: "git config --global init.defaultBranch main"
+
+      - name: Checkout
+        uses: actions/checkout@v1
         with:
           fetch-depth: 1
 
