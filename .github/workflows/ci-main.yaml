@@ -11,6 +11,12 @@ jobs:
     steps:
       - name: Set Default Branch Name
         run: "git config --global init.defaultBranch main"
+      
+      - name: Set Default User Email
+        run: git config --global user.email "dipanjan.kailthya@gmail.com"
+
+      - name: Set Default User Name
+        run: git config --global user.name "Dipanjan Kailthya"
 
       - name: Checkout
         uses: actions/checkout@v3
@@ -19,6 +25,7 @@ jobs:
         uses: actions/setup-python@v1
         with:
           python-version: 3.8
+
       - name: Update Packages
         run: "sudo apt-get update -y && sudo apt-get upgrade -y"
       
