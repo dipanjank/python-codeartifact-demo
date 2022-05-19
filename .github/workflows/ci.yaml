@@ -19,12 +19,7 @@ jobs:
 
       - name: Install Poetry
         run: pip install -r requirements-cicd.txt
-
-      - name: Set Poetry Virtualenv config
-        run: |
-          poetry config settings.virtualenvs.in-project false
-          poetry config settings.virtualenvs.path ~/.virtualenvs
-
+      
       - name: Install Dependencies
         run: make install
 
