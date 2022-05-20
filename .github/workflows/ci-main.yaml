@@ -48,5 +48,5 @@ jobs:
      
       - name: Create Tag
         run: "auto-tag -b main -r . -u origin --skip-tag-if-one-already-present --append-v-to-tag" 
-        env:
+        with:
           GITHUB_TOKEN: ${{ secrets.AUTOTAG_TOKEN }}
