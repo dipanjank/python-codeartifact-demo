@@ -1,6 +1,6 @@
 # python-codeartifact-demo
 
-
+Sample project to explain auto-creation of release tag for a poetry project.
 
 "Github Actions CodeArtifact Demo" 
 
