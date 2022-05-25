@@ -52,7 +52,7 @@ on:
           required: false
 
 jobs:
-  test-and-release:
+  poetry-build:
     runs-on: ubuntu-latest
     steps:
       - name: Set Default Branch Name
