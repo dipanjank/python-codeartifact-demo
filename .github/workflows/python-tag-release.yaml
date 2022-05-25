@@ -98,7 +98,7 @@ jobs:
         run: poetry run flake8 .
 
       - name: Run Bandit
-      - run: poetry run bandit -r ${{ inputs.source_directory }}
+        run: poetry run bandit -r ${{ inputs.source_directory }}
 
       - name: Test with pytest
         run: poetry run pytest -v --cov $${ inputs.source_directory }}
