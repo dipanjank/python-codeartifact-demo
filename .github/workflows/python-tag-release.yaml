@@ -1,0 +1,132 @@
+name: python-tag-release
+
+on:
+  workflow_call:
+    inputs:
+      python_version:
+        required: false
+        type: string
+        default: 3.8
+      source_directory:
+        required: true
+        type: string
+      create_tag:
+        required: false
+        type: boolean
+        default: false
+      deploy:
+        required: false
+        type: boolean
+        default: false
+      ca_domain_owner:
+        required: false
+        type: string
+        default: ""
+      ca_domain:
+        required: false
+        type: string
+        default: ""
+      ca_repository:
+        required: false
+        type: string
+        default: ""
+      aws_region:
+        required: false
+        type: string
+        default: "eu-central-1"
+      ca_role:
+        required: false
+        type: string
+        default: ""
+      ca_session_duration:
+        required: false
+        type: string
+        default: "900"
+
+    secrets:
+        AWS_ACCESS_KEY_ID:
+          required: false
+        AWS_SECRET_ACCESS_KEY:
+          required: false
+        AUTOTAG_TOKEN:
+          required: false
+
+jobs:
+  test-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set Default Branch Name
+        run: "git config --global init.defaultBranch main"
+
+      - name: Set Default User Email
+        run: git config --global user.email "dipanjan.kailthya@gmail.com"
+
+      - name: Set Default User Name
+        run: git config --global user.name "Dipanjan Kailthya"
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+         fetch-depth: 0
+         token: ${{ secrets.AUTOTAG_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ inputs.python_version }}
+
+      - name: Update Packages
+        run: "sudo apt-get update -y && sudo apt-get upgrade -y"
+
+      - name: Install CI Requirements
+        run: |
+          cat > /tmp/requirements-ci.txt << EOF 
+          poetry
+          poetry-dynamic-versioning
+          auto-tag
+          twine
+          flake8
+          bandit
+          awscli
+          EOF
+          pip install -r /tmp/requirements-ci.txt      
+
+      - name: Install Project Dependencies
+        run: poetry install
+
+      - name: Run Flake8
+        run: poetry run flake8 .
+
+      - name: Run Bandit
+      - run: poetry run bandit -r ${{ inputs.source_directory }}
+
+      - name: Test with pytest
+        run: poetry run pytest -v --cov $${ inputs.source_directory }}
+
+      - name: Build Package
+        run: poetry build
+
+      - name: Create Tag
+        run: "auto-tag -b main -r . -u origin --skip-tag-if-one-already-present --append-v-to-tag"
+        if: ${{ inputs.create_tag }}
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ inputs.aws_region }}
+          role-to-assume: ${{ inputs.ca_role }}
+          role-duration-seconds: ${{ inputs.ca_session_duration }}
+        if: ${{ inputs.deploy }}
+
+      - name: Publish Package to CodeArtifact
+        run: |
+          make build
+          aws codeartifact login \
+            --tool twine \
+            --domain-owner ${{ inputs.ca_domain_owner }} \
+            --domain ${{ inputs.ca_domain }} \
+            --repository ${{ inputs.ca_repository }}        
+          twine upload --repository codeartifact dist/*
+        if: ${{ inputs.deploy }}
