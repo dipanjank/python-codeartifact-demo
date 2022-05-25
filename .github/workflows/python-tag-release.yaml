@@ -95,12 +95,15 @@ jobs:
         run: poetry install
 
       - name: Run Flake8
+        if: ! {{inputs.deploy}}
         run: poetry run flake8 .
 
       - name: Run Bandit
+        if: ! {{inputs.deploy}}
         run: poetry run bandit -r ${{ inputs.source_directory }}
 
       - name: Test with pytest
+        if: ! {{inputs.deploy}}
         run: poetry run pytest -v --cov ${{ inputs.source_directory }}
 
       - name: Build Package
@@ -122,7 +125,7 @@ jobs:
 
       - name: Publish Package to CodeArtifact
         run: |
-          make build
+          poetry build
           aws codeartifact login \
             --tool twine \
             --domain-owner ${{ inputs.ca_domain_owner }} \
