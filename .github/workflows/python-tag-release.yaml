@@ -95,15 +95,12 @@ jobs:
         run: poetry install
 
       - name: Run Flake8
-        if: ${{ inputs.deploy }} == false
         run: poetry run flake8 .
 
       - name: Run Bandit
-        if: ${{ inputs.deploy }} == false
         run: poetry run bandit -r ${{ inputs.source_directory }}
 
       - name: Test with pytest
-        if: ${{ inputs.deploy }} == false
         run: poetry run pytest -v --cov ${{ inputs.source_directory }}
 
       - name: Build Package
