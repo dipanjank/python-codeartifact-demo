@@ -1,40 +1,20 @@
-#name: CI-Tag-Release
-#
-#on:
-#  push:
-#    tags:
-#      - '*'
-#
-#jobs:
-#  test-and-release:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v1
-#        with:
-#          fetch-depth: 1
-#
-#      - name: Set up Python 3.8
-#        uses: actions/setup-python@v1
-#        with:
-#          python-version: 3.8
-#
-#      - name: Install Poetry
-#        run: pip install -r requirements-cicd.txt
-#
-#      - name: Install Dependencies
-#        run: make install
-#
-#      - name: Configure AWS Credentials
-#        uses: aws-actions/configure-aws-credentials@v1
-#        with:
-#          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#          aws-region: eu-central-1
-#          role-to-assume: arn:aws:iam::381665779871:role/CodeArtifactAccessRole
-#          role-duration-seconds: 900
-#
-#      - name: Publish Package to CodeArtifact
-#        run: |
-#          make build
-#          aws codeartifact login --tool twine --domain-owner 381665779871 --domain ca-demo --repository ca-repo
-#          twine upload --repository codeartifact dist/*
+name: CI-Tag-Release
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  release:
+    uses: ./.github/workflows/python-tag-release.yaml
+    with:
+      python_version: 3.8
+      source_directory: python_codeartifact_demo
+      deploy: true
+      ca_domain_owner: "381665779871"
+      ca_domain: "ca-demo"
+      ca_repository: "ca-repo"
+      ca_role: "arn:aws:iam::381665779871:role/CodeArtifactAccessRole"
+      aws_region: "eu-central-1"
+    secrets: inherit
