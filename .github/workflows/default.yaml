@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 jobs:
   release:
-    if: startsWith(github.ref, "refs/tags/v")
+    if: startsWith(github.ref, 'refs/tags/v')
     uses: ./.github/workflows/python-tag-release.yaml
     with:
       python_version: 3.8
@@ -18,7 +18,7 @@ jobs:
     secrets: inherit
 
   create-tag:
-    if: github.ref == "refs/heads/main"
+    if: github.ref == 'refs/heads/main'
     uses: ./.github/workflows/python-tag-release.yaml
     with:
       python_version: 3.8
@@ -28,7 +28,7 @@ jobs:
     secrets: inherit
 
   code-quality-test:
-    if: github.ref != "refs/heads/main"
+    if: github.ref != 'refs/heads/main' && startsWith(github.ref, 'refs/heads/')
     uses: ./.github/workflows/python-tag-release.yaml
     with:
       python_version: 3.8
