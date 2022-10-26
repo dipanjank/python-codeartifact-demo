@@ -1,4 +1,4 @@
-name: python-tag-release
+name: poetry-release
 
 on:
   workflow_call:
@@ -14,30 +14,22 @@ on:
         required: false
         type: boolean
         default: false
-      deploy:
-        required: false
-        type: boolean
-        default: false
       ca_domain_owner:
-        required: false
+        required: true
         type: string
-        default: ""
       ca_domain:
-        required: false
+        required: true
         type: string
-        default: ""
       ca_repository:
-        required: false
+        required: true
         type: string
-        default: ""
       aws_region:
         required: false
         type: string
         default: "eu-central-1"
       ca_role:
-        required: false
+        required: true
         type: string
-        default: ""
       ca_session_duration:
         required: false
         type: string
@@ -48,11 +40,9 @@ on:
           required: false
         AWS_SECRET_ACCESS_KEY:
           required: false
-        AUTOTAG_TOKEN:
-          required: false
 
 jobs:
-  poetry-build:
+  poetry-release-package:
     runs-on: ubuntu-latest
     steps:
       - name: Set Default Branch Name
@@ -83,32 +73,13 @@ jobs:
           cat > /tmp/requirements-ci.txt << EOF 
           poetry
           poetry-dynamic-versioning
-          auto-tag
           twine
-          flake8
-          bandit
           awscli
           EOF
           pip install -r /tmp/requirements-ci.txt      
 
       - name: Install Project Dependencies
         run: poetry install
-
-      - name: Run Flake8
-        run: poetry run flake8 .
-
-      - name: Run Bandit
-        run: poetry run bandit -r ${{ inputs.source_directory }}
-
-      - name: Test with pytest
-        run: poetry run pytest -v --cov ${{ inputs.source_directory }}
-
-      - name: Build Package
-        run: poetry build
-
-      - name: Create Tag
-        run: "auto-tag -b main -r . -u origin --skip-tag-if-one-already-present --append-v-to-tag"
-        if: ${{ inputs.create_tag }}
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -118,9 +89,8 @@ jobs:
           aws-region: ${{ inputs.aws_region }}
           role-to-assume: ${{ inputs.ca_role }}
           role-duration-seconds: ${{ inputs.ca_session_duration }}
-        if: ${{ inputs.deploy }}
 
-      - name: Publish Package to CodeArtifact
+      - name: Publish Package to CodeArtifact (if tag)
         run: |
           poetry build
           aws codeartifact login \
@@ -129,4 +99,4 @@ jobs:
             --domain ${{ inputs.ca_domain }} \
             --repository ${{ inputs.ca_repository }}        
           twine upload --repository codeartifact dist/*
-        if: ${{ inputs.deploy }}
+        if: startsWith(github.ref, 'refs/tags/v')

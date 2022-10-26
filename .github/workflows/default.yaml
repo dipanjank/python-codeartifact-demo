@@ -1,36 +1,18 @@
 name: CI-Tag-Release
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+    pull_request:
+      branches:
+        - main
 
 jobs:
-  release:
-    if: startsWith(github.ref, 'refs/tags/v')
-    uses: ./.github/workflows/python-tag-release.yaml
+  code-quality-check:
+    if: startsWith(github.ref, 'refs/heads/')
+    uses: ./.github/workflows/poetry-build-test-quality-check.yaml
     with:
       python_version: 3.8
       source_directory: python_codeartifact_demo
-      deploy: true
-      ca_domain_owner: "381665779871"
-      ca_domain: "ca-demo"
-      ca_repository: "ca-repo"
-      ca_role: "arn:aws:iam::381665779871:role/CodeArtifactAccessRole"
-      aws_region: "eu-central-1"
-    secrets: inherit
 
-  create-tag:
-    if: github.ref == 'refs/heads/main'
-    uses: ./.github/workflows/python-tag-release.yaml
-    with:
-      python_version: 3.8
-      source_directory: python_codeartifact_demo
-      create_tag: true
-      aws_region: "eu-central-1"
-    secrets: inherit
-
-  code-quality-test:
-    if: github.ref != 'refs/heads/main' && startsWith(github.ref, 'refs/heads/')
-    uses: ./.github/workflows/python-tag-release.yaml
-    with:
-      python_version: 3.8
-      source_directory: python_codeartifact_demo
-      aws_region: "eu-central-1"

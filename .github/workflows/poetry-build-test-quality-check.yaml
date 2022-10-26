@@ -1,0 +1,72 @@
+name: poetry-build-test-code-quality
+
+on:
+  workflow_call:
+    inputs:
+      python_version:
+        required: false
+        type: string
+        default: 3.8
+      source_directory:
+        required: true
+        type: string
+
+    secrets:
+        AWS_ACCESS_KEY_ID:
+          required: false
+        AWS_SECRET_ACCESS_KEY:
+          required: false
+
+jobs:
+  poetry-test-code-quality:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set Default Branch Name
+        run: "git config --global init.defaultBranch main"
+
+      - name: Set Default User Email
+        run: git config --global user.email "dipanjan.kailthya@gmail.com"
+
+      - name: Set Default User Name
+        run: git config --global user.name "Dipanjan Kailthya"
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+         fetch-depth: 0
+         token: ${{ secrets.AUTOTAG_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ inputs.python_version }}
+
+      - name: Update Packages
+        run: "sudo apt-get update -y && sudo apt-get upgrade -y"
+
+      - name: Install CI Requirements
+        run: |
+          cat > /tmp/requirements-ci.txt << EOF 
+          poetry
+          poetry-dynamic-versioning
+          twine
+          flake8
+          bandit
+          awscli
+          EOF
+          pip install -r /tmp/requirements-ci.txt      
+
+      - name: Install Project Dependencies
+        run: poetry install
+
+      - name: Run Flake8
+        run: poetry run flake8 .
+
+      - name: Run Bandit
+        run: poetry run bandit -r ${{ inputs.source_directory }}
+
+      - name: Test with pytest
+        run: poetry run pytest -v --cov ${{ inputs.source_directory }}
+
+      - name: Build Package
+        run: poetry build
