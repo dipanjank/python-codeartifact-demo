@@ -39,7 +39,7 @@ jobs:
           body: ${{ steps.tag_version.outputs.changelog }}
 
   deploy-release:
-    if: startsWith(github.ref, "refs/tags/v")
+    if: startsWith(github.ref, 'refs/tags/v')
     uses: ./.github/workflows/poetry-release.yaml
     with:
       ca_domain_owner: "381665779871"
