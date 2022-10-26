@@ -60,7 +60,7 @@ jobs:
          fetch-depth: 0
 
       - name: Switch to Tag
-        run: git switch --detach ${{ inputs.release_version }}
+        run: git switch ${{ inputs.release_version }}
 
       - name: Set up Python
         uses: actions/setup-python@v1
