@@ -59,8 +59,8 @@ jobs:
         with:
          fetch-depth: 0
 
-      - name: Switch to Tag
-        run: git switch -c ${{ inputs.release_version }}
+      - name: Checkout Tag
+        run: git checkout tags/${{ inputs.release_version }}
 
       - name: Set up Python
         uses: actions/setup-python@v1
