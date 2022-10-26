@@ -32,9 +32,6 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-         fetch-depth: 0
-         token: ${{ secrets.AUTOTAG_TOKEN }}
 
       - name: Set up Python
         uses: actions/setup-python@v1
