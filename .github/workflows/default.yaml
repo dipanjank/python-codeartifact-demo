@@ -48,12 +48,12 @@ jobs:
           workflow: poetry-release
           token: ${{ secrets.GITHUB_TOKEN }}
           inputs: |
-          '{  
+          {
             "source_directory": "python_codeartifact_demo", 
             "ca_domain_owner": "381665779871",
             "ca_domain": "ca-demo",
             "ca_repository": "ca-repo",
             "ca_role: "arn:aws:iam::381665779871:role/CodeArtifactAccessRole",
             "aws_region: "eu-central-1" 
-          }'
+          }
 
