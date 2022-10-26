@@ -10,7 +10,7 @@ on:
       source_directory:
         required: true
         type: string
-      release_tag:
+      release_version:
         required: true
         type: string
         default: false
@@ -58,7 +58,9 @@ jobs:
         uses: actions/checkout@v3
         with:
          fetch-depth: 0
-         ref: ${{ inputs.release_tag }}
+
+      - name: Switch to Tag
+        run: git switch --detach ${{ inputs.release_version }}
 
       - name: Set up Python
         uses: actions/setup-python@v1

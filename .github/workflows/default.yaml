@@ -41,7 +41,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           inputs: |
             {
-              "release_tag": "${{ steps.tag_version.outputs.new_tag }}",
+              "release_version": "${{ steps.tag_version.outputs.new_tag }}",
               "source_directory": "python_codeartifact_demo",
               "ca_domain_owner": "381665779871",
               "ca_domain": "ca-demo",
