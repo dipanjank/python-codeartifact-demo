@@ -9,16 +9,16 @@ on:
         - main
 
 jobs:
-  code-quality-check:
-    if: startsWith(github.ref, 'refs/heads/')
-    uses: ./.github/workflows/poetry-build-test-quality-check.yaml
-    with:
-      python_version: 3.8
-      source_directory: python_codeartifact_demo
+#  code-quality-check:
+#    if: startsWith(github.ref, 'refs/heads/')
+#    uses: ./.github/workflows/poetry-build-test-quality-check.yaml
+#    with:
+#      python_version: 3.8
+#      source_directory: python_codeartifact_demo
 
   create-release:
-    needs:
-      - code-quality-check
+#    needs:
+#      - code-quality-check
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
@@ -40,7 +40,7 @@ jobs:
           workflow: poetry-release
           token: ${{ secrets.GITHUB_TOKEN }}
           inputs: |
-            '{
+            {
               "release_tag": ${{ steps.tag_version.outputs.new_tag }},
               "source_directory": "python_codeartifact_demo",
               "ca_domain_owner": "381665779871",
@@ -48,5 +48,5 @@ jobs:
               "ca_repository": "ca-repo",
               "ca_role: "arn:aws:iam::381665779871:role/CodeArtifactAccessRole",
               "aws_region: "eu-central-1"
-            }'
+            }
 
