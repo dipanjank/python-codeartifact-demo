@@ -46,7 +46,7 @@ jobs:
               "ca_domain_owner": "381665779871",
               "ca_domain": "ca-demo",
               "ca_repository": "ca-repo",
-              "ca_role: "arn:aws:iam::381665779871:role/CodeArtifactAccessRole",
-              "aws_region: "eu-central-1"
+              "ca_role": "arn:aws:iam::381665779871:role/CodeArtifactAccessRole",
+              "aws_region": "eu-central-1"
             }
 
