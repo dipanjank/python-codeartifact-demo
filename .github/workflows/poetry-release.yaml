@@ -101,4 +101,3 @@ jobs:
             --domain ${{ inputs.ca_domain }} \
             --repository ${{ inputs.ca_repository }}        
           twine upload --repository codeartifact dist/*
-        if: startsWith(github.ref, 'refs/tags/v')
