@@ -29,9 +29,6 @@ jobs:
         with:
           python-version: 3.9
 
-      - name: Update Packages
-        run: "sudo apt-get update -y && sudo apt-get upgrade -y"
-
       - name: Install and configure Poetry
         uses: snok/install-poetry@v1
         with:
