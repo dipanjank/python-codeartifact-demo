@@ -34,6 +34,9 @@ jobs:
         with:
           virtualenvs-create: true
 
+      - name: Install Project Dependencies
+        run: poetry install --with dev
+
       - name: Test with pytest
         run: poetry run pytest -v --cov ${{ inputs.source_directory }}
 
