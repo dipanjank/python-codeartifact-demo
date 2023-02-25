@@ -1,7 +1,7 @@
 name: poetry-build-test-code-quality
 
 on:
-  pull_requests:
+  pull_request:
     branches:
       - main
   branches:
