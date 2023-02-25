@@ -1,21 +1,10 @@
 name: poetry-build-test-code-quality
 
 on:
-  workflow_call:
-    inputs:
-      python_version:
-        required: false
-        type: string
-        default: 3.8
-      source_directory:
-        required: true
-        type: string
-
-    secrets:
-        AWS_ACCESS_KEY_ID:
-          required: false
-        AWS_SECRET_ACCESS_KEY:
-          required: false
+  pull_requests:
+    branches:
+      - main
+    branches
 
 jobs:
   poetry-test-code-quality:
