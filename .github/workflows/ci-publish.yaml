@@ -1,4 +1,4 @@
-name: CI
+name: publish-codeartifact
 
 on:
   workflow_run:
@@ -7,7 +7,7 @@ on:
     types: [ completed ]
 
 jobs:
-  do-stuff:
+  publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
