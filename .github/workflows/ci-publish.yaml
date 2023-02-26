@@ -42,16 +42,16 @@ jobs:
           git switch --detach ${RELEASE_VERSION}
       - name: Run Poetry Build
         run: poetry build
-      - name: Authenticate to CodeArtifact
-        uses: source-ag/codeartifact-login-action@v1
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-central-1
-          codeartifact-domain: ca-demo
-          codeartifact-domain-owner: 381665779871
-          codeartifact-repository: ca-repo
-          configure-poetry: true
 
       - name: Publish to CodeArtifact
-        run: poetry publish
+        run: |
+          pip install twine
+          aws codeartifact login --tool twine --domain ca-demo --domain-owner 381665779871 --repository ca-repo
+          twine upload dist/*
