@@ -37,7 +37,7 @@ jobs:
       - name: Checkout Release Tag
         run: |
           RELEASE_VERSION=$(semantic-release print-version --current)
-          git switch -c ${RELEASE_VERSION}
+          git switch --detach v${RELEASE_VERSION}
       - name: Run Poetry Build
         run: poetry build
 #      - name: Authenticate to CodeArtifact
