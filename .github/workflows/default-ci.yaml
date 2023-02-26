@@ -34,7 +34,7 @@ jobs:
         run: poetry install --with dev
 
       - name: Test with pytest
-        run: poetry run pytest -vs ${{ inputs.source_directory }}
+        run: poetry run pytest -vs
 
       - name: Build Package
         run: poetry build
