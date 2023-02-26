@@ -10,6 +10,9 @@ on:
 
 jobs:
   poetry-run-tests:
+    strategy:
+      matrix:
+        python_version: ['3.8', '3.9', '3.10']
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -24,7 +27,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.9
+          python-version: ${{ matrix.python_version }}
           cache: poetry
 
       - name: Install Project Dependencies
