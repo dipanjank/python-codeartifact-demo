@@ -1,4 +1,4 @@
-name: poetry-build-test-code-quality
+name: poetry-build-test-release
 
 on:
   pull_request:
@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  poetry-run-tests:
+  test:
     strategy:
       matrix:
         python_version: ['3.8', '3.9', '3.10']
@@ -38,3 +38,21 @@ jobs:
 
       - name: Build Package
         run: poetry build
+
+  release:
+    if: github.ref == 'refs/heads/main'
+    needs:
+      - test
+    runs-on: ubuntu-latest
+    concurrency: release
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Python Semantic Release
+        uses: relekang/python-semantic-release@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          repository_username: aws
+          repository_password: ${{ secrets.PYPI_TOKEN }}
