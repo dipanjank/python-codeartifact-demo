@@ -53,4 +53,4 @@ jobs:
       - name: Python Semantic Release
         run: pip install python-semantic-release==7.33.2
       - name: Create Release
-        run: python semantic-release publish
+        run: semantic-release publish
