@@ -56,6 +56,5 @@ jobs:
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          semantic-release version --verbosity=DEBUG
           semantic-release publish --verbosity=DEBUG
-          semantic-release print-version --current
+          semantic-release print-version --current >> ${GITHUB_OUTPUT}
