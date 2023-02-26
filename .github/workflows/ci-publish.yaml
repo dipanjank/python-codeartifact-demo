@@ -32,12 +32,14 @@ jobs:
 
       - name: Install dependencies
         run: poetry install
+      - name: Install Poetry Dynamic Versioning Plugin
+        run: poetry self add poetry-dynamic-versioning[plugin]
       - name: Install Python Semantic Release
         run: pip install python-semantic-release==7.33.2
       - name: Checkout Release Tag
         run: |
-          RELEASE_VERSION=$(semantic-release print-version --current)
-          git switch --detach v${RELEASE_VERSION}
+          RELEASE_VERSION="v$(semantic-release print-version --current)"
+          git switch --detach ${RELEASE_VERSION}
       - name: Run Poetry Build
         run: poetry build
 #      - name: Authenticate to CodeArtifact
