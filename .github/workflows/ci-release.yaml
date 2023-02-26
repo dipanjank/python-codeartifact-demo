@@ -59,4 +59,4 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
           semantic-release publish --verbosity=DEBUG
-          semantic-release print-version --current >> ${GITHUB_OUTPUT}
+          echo "RELEASE_VERSION=$(semantic-release print-version --current)" >> ${GITHUB_OUTPUT}
