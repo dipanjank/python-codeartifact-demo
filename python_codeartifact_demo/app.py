@@ -4,7 +4,6 @@ logger = logging.getLogger("python_codeartifact_demo")
 
 
 class App:
-
     def __init__(self, settings):
         self.settings = settings
 
