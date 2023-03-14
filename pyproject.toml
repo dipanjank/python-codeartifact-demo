@@ -21,6 +21,7 @@ classifiers = [
 python = ">=3.7"
 PyYAML = "^5.4.1"
 pyspark = ">=3, <4"
+sagemaker = ">=2.138.0"
 
 [tool.poetry-dynamic-versioning]
 enable = true
