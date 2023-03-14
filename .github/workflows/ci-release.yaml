@@ -42,7 +42,10 @@ jobs:
           configure-poetry: true
 
       - name: Install Project Dependencies
-        run: poetry install --with dev -E python-codeartifact-demo==1.5.1
+        run: poetry install --with dev
+
+      - name: Add Private Package
+        run: poetry add python-codeartifact-demo==1.5.1
 
       - name: Test with pytest
         run: poetry run pytest -vs
