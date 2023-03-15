@@ -21,34 +21,24 @@ jobs:
       - name: Install and configure Poetry
         uses: snok/install-poetry@v1
         with:
-          virtualenvs-create: true
+          virtualenvs-create: false
           virtualenvs-in-project: false
+
+      - name: Export Poetry Lockfile
+        run: poetry export --with dev --without-hashes --without-urls -o requirements-dev.txt
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python_version }}
-          cache: poetry
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
 
-      - name: Authenticate to CodeArtifact
-        uses: ./.github/actions/codeartifact-login-action
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: eu-central-1
-          codeartifact-domain: ca-demo
-          codeartifact-domain-owner: 381665779871
-          codeartifact-repository: ca-repo
-          configure-poetry: true
-
-      - name: Install Project Dependencies
-        run: poetry install --with dev
-
-      - name: Add Private Package
-        run: poetry add python-codeartifact-demo==1.5.1
+      - name: Install requirements
+        run: pip install -r requirements-dev.txt
 
       - name: Test with pytest
-        run: poetry run pytest -vs
+        run: poetry run pytest
 
       - name: Build Package
         run: poetry build
