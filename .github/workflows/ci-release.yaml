@@ -21,20 +21,24 @@ jobs:
       - name: Install and configure Poetry
         uses: snok/install-poetry@v1
         with:
-          virtualenvs-create: true
+          virtualenvs-create: false
           virtualenvs-in-project: false
+
+      - name: Export Poetry Lockfile
+        run: poetry export --with dev --without-hashes --without-urls -o requirements-dev.txt
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python_version }}
-          cache: poetry
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
 
-      - name: Install Project Dependencies
-        run: poetry install --with dev
+      - name: Install requirements
+        run: pip install -r requirements-dev.txt
 
       - name: Test with pytest
-        run: poetry run pytest -vs
+        run: poetry run pytest
 
       - name: Build Package
         run: poetry build
